@@ -1,0 +1,100 @@
+body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background-color: white;
+  }
+  
+  /* Navbar */
+  header {
+    background-color: #e88094;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .brand {
+    color: white;
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  nav {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-link {
+    color: black;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .nav-link.active {
+    background-color: white;
+    font-weight: bold;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd;
+  }
+  
+  /* Home content */
+  .home-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 80px;
+  }
+  
+  .home-message {
+    max-width: 500px;
+  }
+  
+  .home-message h2 {
+    font-size: 36px;
+    color: #e88094;
+    margin-bottom: 10px;
+  }
+  
+  .home-message p {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  
+  .btn.pink {
+    background-color: #e88094;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  .second-btn {
+    margin-left: 40px; 
+  }
+  
+  .btn.pink:hover {
+    background-color: #d06b7f;
+  }
+  
+  .home-logo {
+    width: 250px;
+    height: auto;
+  }
+  
