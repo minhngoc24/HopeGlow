@@ -1,0 +1,160 @@
+/* Reset + font */
+body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background-color: white;
+  }
+  
+  /* Navbar */
+  header {
+    background-color: #e88094;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 25px;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .brand {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  nav {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+  
+  .nav-link.active {
+    background-color: white;
+    font-weight: bold;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd;
+  }
+  
+  /* PHẦN SCAN */
+  .scan-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+    gap: 30px;
+  }
+  
+  .scan-frame {
+    border: 5px solid #e88094;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  
+  #video {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+  }
+  
+  .scan-button {
+    background-color: #e88094;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .scan-button:hover {
+    background-color: #d06b7f;
+  }
+  
+  /* PHẦN DONATE SAU KHI SCAN */
+  .donate-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 40px;
+  }
+  
+  .left-preview {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .preview-img {
+    width: 100px;
+    margin-bottom: 15px;
+    border: 3px solid #e88094;
+    border-radius: 8px;
+  }
+  
+  .add-more {
+    background-color: #e88094;
+    color: white;
+    font-size: 20px;
+    border-radius: 50%;
+    border: none;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .description-area {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .description-area h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .description-area textarea {
+    width: 300px;
+    height: 150px;
+    margin-bottom: 15px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+  }
+  
+  .donate-final {
+    background-color: #e88094;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .donate-final:hover {
+    background-color: #d06b7f;
+  }
+  

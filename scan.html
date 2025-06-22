@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HopeGlow - Donate</title>
+  <link rel="stylesheet" href="donate.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <h1 class="brand">HopeGlow</h1>
+      <nav>
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="donate.html" class="nav-link active">Donate</a>
+        <a href="seekHelp.html" class="nav-link">Seek Help</a>
+      </nav>
+    </div>
+    <div class="profile-icon"></div>
+  </header>
+
+  <main>
+    <div class="scan-container" id="scanSection">
+      <div class="scan-frame">
+        <video id="video" autoplay></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+      </div>
+      <button id="snap" class="scan-button">📷 Scan</button>
+    </div>
+  
+    <div class="donate-section" id="donateSection" style="display: none;">
+      <div class="left-preview" id="imagePreview">
+        <button id="addMoreBtn" class="add-more">+</button>
+      </div>
+      <div class="description-area">
+        <h2>Describe Item</h2>
+        <textarea placeholder="Describe your item here..."></textarea>
+        <button class="donate-final">Donate</button>
+      </div>
+    </div>
+  </main>
+  
+  
+
+  <script src="donate-camera.js"></script>
+</body>
+</html>
