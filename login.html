@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HopeGlow - Welcome</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <header>
+    <h1>HopeGlow</h1>
+  </header>
+
+  <main class="container">
+    <img src="HopeGlow-removebg-preview.png" alt="HopeGlow Logo" class="logo"/>
+    <h2>Welcome to HopeGlow</h2>
+    <div class="buttons">
+      <input placeholder="Username" class="username" ><br><br>
+      <input placeholder="Password" class = "password">
+    </div>
+  </main>
+
+  <script>
+    const usernameInput = document.querySelector('.username');
+    const passwordInput = document.querySelector('.password');
+
+    usernameInput.addEventListener("keydown", function(event){
+        if(event.key === 'Enter'){
+            passwordInput.focus();
+        }
+    });
+
+    passwordInput.addEventListener("keydown", function(event){
+        if(event.key === 'Enter'){
+            login();
+        }
+    });
+
+    function login(){
+        const usernameInput = document.querySelector('.username');
+        const passwordInput = document.querySelector('.password');
+        alert("Logging in...\nUsername: " + usernameInput);
+    }
+
+  </script>
+</body>
+</html>
