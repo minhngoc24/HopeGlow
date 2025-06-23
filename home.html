@@ -18,19 +18,44 @@
         <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-    <div class="profile-icon"></div>
+
+    <!-- Dropdown Avatar -->
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">Edit Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
   </header>
 
   <!-- Main Content -->
   <main class="home-container">
     <div class="home-message">
+      <img src="HopeGlow-removebg-preview.png" alt="HopeGlow Logo" class="home-logo">
       <h2>Welcome to HopeGlow</h2>
       <p>Your platform to give hope, donate items, and help those in need.</p>
       <a href="donate.html" class="btn pink">Start Donating</a>
-      <a href="seekHelp.html" class="btn pink second-btn"> Seek for help</a>
+      <a href="seekHelp.html" class="btn pink second-btn">Seek for help</a>
     </div>
-    <img src="HopeGlow-removebg-preview.png" alt="HopeGlow Logo" class="home-logo">
   </main>
+
+  <script>
+
+    // Script for avatar dropdown
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+  </script>
 
 </body>
 </html>

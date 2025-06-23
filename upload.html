@@ -18,7 +18,15 @@
         <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-    <div class="profile-icon"></div>
+    <!-- Dropdown Avatar -->
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">Edit Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
+    
   </header>
 
   <!-- Upload section -->
@@ -26,9 +34,11 @@
     <div class="left-preview">
       <input type="file" id="imageInput" accept="image/*">
       <img id="previewImage" class="preview-img" style="display: none;">
+      
     </div>
 
     <div class="description-area">
+        
       <h2>Describe Item</h2>
       <textarea placeholder="Describe your item here..."></textarea>
       <button class="donate-final">Donate</button>
@@ -48,6 +58,20 @@
           previewImage.style.display = 'block';
         };
         reader.readAsDataURL(file);
+      }
+    });
+
+    // Script for avatar dropdown
+     const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
       }
     });
   </script>

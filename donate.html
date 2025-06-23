@@ -18,7 +18,14 @@
         <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-    <div class="profile-icon"></div>
+    <!-- Dropdown Avatar -->
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">Edit Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
   </header>
 
   <!-- Main Content -->
@@ -48,6 +55,21 @@
 
     scanBtn.addEventListener("click", () => handleChoice("scan"));
     uploadBtn.addEventListener("click", () => handleChoice("upload"));
+
+    // Script for dropdown avatar
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+  </script>
         
 
     </script>

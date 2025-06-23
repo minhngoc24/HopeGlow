@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HopeGlow - Donate</title>
-  <link rel="stylesheet" href="donate.css">
+  <title>HopeGlow - Scan</title>
+  <link rel="stylesheet" href="scan.css">
 </head>
 <body>
 
@@ -17,7 +17,14 @@
         <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-    <div class="profile-icon"></div>
+    <!-- Dropdown Avatar -->
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">Edit Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -43,6 +50,8 @@
   
   
 
-  <script src="donate-camera.js"></script>
+  <script src="scan-camera.js">
+   
+  </script>
 </body>
 </html>

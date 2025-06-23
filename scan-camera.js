@@ -34,3 +34,18 @@ addMoreBtn.addEventListener("click", () => {
   scanSection.style.display = "flex";
   donateSection.style.display = "none";
 });
+
+
+ // Script for avatar dropdown
+ const profileIcon = document.getElementById("profileIcon");
+ const dropdownMenu = document.getElementById("dropdownMenu");
+
+ profileIcon.addEventListener("click", function () {
+   dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+ });
+
+ document.addEventListener("click", function (event) {
+   if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+     dropdownMenu.style.display = "none";
+   }
+ });

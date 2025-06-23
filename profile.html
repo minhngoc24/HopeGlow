@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HopeGlow - Profile</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <h1 class="brand">HopeGlow</h1>
+      <nav>
+        <a href="home.html">Home</a>
+        <a href="donate.html">Donate</a>
+        <a href="seekHelp.html">Seek Help</a>
+      </nav>
+    </div>
+     <!-- Dropdown Avatar -->
+     <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">Edit Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="profile-wrapper">
+    <div class="profile-picture">
+      <img src="placeholder.png" alt="Profile Picture">
+      <div class="edit-label">Edit Profile Picture</div>
+    </div>
+    <div class="profile-info">
+      <div id="displayName" class="display-name">Your Name</div>
+
+      <div class="label">Username</div>
+      <input id="username" type="text" placeholder="Username">
+
+      <div class="label">First Name</div>
+      <input id="firstNameInput" type="text" placeholder="First Name">
+
+      <div class="label">Last Name</div>
+      <input id="lastNameInput" type="text" placeholder="Last Name">
+
+      <div class="label">Pronouns</div>
+      <select>
+        <option>she/her</option>
+        <option>he/him</option>
+        <option>they/them</option>
+        <option>Other</option>
+      </select>
+
+      <div class="label">Birthday</div>
+      <input type="text" placeholder="MM/DD/YYYY">
+
+      <div class="location">Location</div>
+      <div class="location-group">
+        <div class="label">Address line 1</div>
+        <input id="add1" type="text" placeholder="Address Line 1">
+
+        <div class="label">Address line 2</div>
+        <input id="add2" type="text" placeholder="Address Line 2">
+
+        <div class="label">City</div>
+        <input id="city" type="text" placeholder="City">
+
+        <div class="label">State</div>
+        <input id="state" type="text" placeholder="State">
+
+        <div class="label">Postal Code</div>
+        <input id="postal" type="text" placeholder="Postal">
+      </div> 
+    </div>
+
+  </div>
+
+  <div class="fixed-display hidden" id="fixedDisplay">
+    <p><strong>Name:</strong> <span id="displayName">-</span></p>
+    <p><strong>Pronouns:</strong> <span id="displayPronouns">-</span></p>
+    <p><strong>Birthday:</strong> <span id="displayBirthday">-</span></p>
+    <button class="edit-button" id="editBtn">Edit</button>
+  </div>
+</div>
+
+  <script>
+    const firstNameInput = document.getElementById("firstNameInput");
+    const lastNameInput = document.getElementById("lastNameInput");
+    const displayName = document.getElementById("displayName");
+
+    function updateDisplayName() {
+      const first = firstNameInput.value.trim();
+      const last = lastNameInput.value.trim();
+      displayName.textContent = `${first} ${last}`.trim() || "Your Name";
+    }
+
+    firstNameInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") updateDisplayName();
+    });
+    lastNameInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") updateDisplayName();
+    });
+
+    // Script for avatar dropdown
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
