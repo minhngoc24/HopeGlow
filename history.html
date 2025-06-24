@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HopeGlow - Home</title>
-  <link rel="stylesheet" href="home.css">
+  <title>HopeGlow - History</title>
+  <link rel="stylesheet" href="history.css">
 </head>
 <body>
 
@@ -13,13 +13,12 @@
     <div class="nav-left">
       <h1 class="brand">HopeGlow</h1>
       <nav>
-        <a href="home.html" class="nav-link active">Home</a>
+        <a href="home.html" class="nav-link">Home</a>
         <a href="donate.html" class="nav-link">Donate</a>
         <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-
-    <!-- Dropdown Avatar -->
+    <!-- Avatar Dropdown -->
     <div class="dropdown">
       <img id="profileIcon" class="profile-icon" src="default.png" />
       <div class="dropdown-menu" id="dropdownMenu">
@@ -31,32 +30,38 @@
   </header>
 
   <!-- Main Content -->
-  <main class="home-container">
-    <div class="home-message">
-      <img src="HopeGlow-removebg-preview.png" alt="HopeGlow Logo" class="home-logo">
-      <h2>Welcome to HopeGlow</h2>
-      <p>Your platform to give hope, donate items, and help those in need.</p>
-      <a href="donate.html" class="btn pink">Start Donating</a>
-      <a href="seekHelp.html" class="btn pink second-btn">Seek for help</a>
-    </div>
+  <main class="history-container" id="historyList">
+    <!-- Items will be populated here -->
   </main>
 
   <script>
+    // Load donation history from localStorage
+    const historyList = document.getElementById("historyList");
+    const historyData = JSON.parse(localStorage.getItem("donationHistory")) || [];
 
-    // Script for avatar dropdown
+    historyData.reverse().forEach(item => {
+      const card = document.createElement("div");
+      card.className = "history-card";
+      card.innerHTML = `
+        <img src="${item.image}" class="history-image" alt="Donated item">
+        <h3>${item.title}</h3>
+      `;
+      historyList.appendChild(card);
+    });
+
+    // Dropdown script
     const profileIcon = document.getElementById("profileIcon");
     const dropdownMenu = document.getElementById("dropdownMenu");
-  
+
     profileIcon.addEventListener("click", function () {
       dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
     });
-  
+
     document.addEventListener("click", function (event) {
       if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
         dropdownMenu.style.display = "none";
       }
     });
   </script>
-
 </body>
 </html>
