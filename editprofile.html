@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - HopeGlow</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <h1 class="brand">HopeGlow</h1>
+      <nav>
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="donate.html" class="nav-link">Donate</a>
+        <a href="seekHelp.html" class="nav-link">Seek Help</a>
+      </nav>
+    </div>
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">My Profile</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="profile-wrapper">
+    <div class="profile-picture">
+      <img src="placeholder.png" alt="Profile Picture">
+      <div class="edit-label">Change Profile Picture</div>
+    </div>
+    <div class="profile-info">
+      <div class="label">Username</div>
+      <input id="username" type="text" placeholder="Username">
+
+      <div class="label">First Name</div>
+      <input id="firstNameInput" type="text" placeholder="First Name">
+
+      <div class="label">Last Name</div>
+      <input id="lastNameInput" type="text" placeholder="Last Name">
+
+      <div class="label">Pronouns</div>
+      <select id="pronounsInput">
+        <option value="she/her">she/her</option>
+        <option value="he/him">he/him</option>
+        <option value="they/them">they/them</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <div class="label">Birthday</div>
+      <input id="birthdayInput" type="text" placeholder="MM/DD/YYYY">
+
+      <div class="label">Location</div>
+      <div class="location-group">
+        <div class="label">Address line 1</div>
+        <input id="add1" type="text" placeholder="Address Line 1">
+
+        <div class="label">Address line 2</div>
+        <input id="add2" type="text" placeholder="Address Line 2">
+
+        <div class="label">City</div>
+        <input id="city" type="text" placeholder="City">
+
+        <div class="label">State</div>
+        <input id="state" type="text" placeholder="State">
+
+        <div class="label">Postal Code</div>
+        <input id="postal" type="text" placeholder="Postal">
+      </div>
+    </div>
+  </div>
+
+  <div class="save-button-container">
+    <button id="saveBtn" class="save-button">Save</button>
+
+  </div>
+
+  <script>
+    const saveBtn = document.getElementById("saveBtn");
+
+    saveBtn.addEventListener("click", () => {
+      const profileData = {
+        username: document.getElementById("username").value,
+        firstName: document.getElementById("firstNameInput").value,
+        lastName: document.getElementById("lastNameInput").value,
+        pronouns: document.getElementById("pronounsInput").value,
+        birthday: document.getElementById("birthdayInput").value,
+        address1: document.getElementById("add1").value,
+        address2: document.getElementById("add2").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        postal: document.getElementById("postal").value
+      };
+
+      localStorage.setItem("profileData", JSON.stringify(profileData));
+      window.location.href = "profile.html";
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+    const data = JSON.parse(localStorage.getItem("profileData"));
+    if (data) {
+      document.getElementById("username").value = data.username || "";
+      document.getElementById("firstNameInput").value = data.firstName || "";
+      document.getElementById("lastNameInput").value = data.lastName || "";
+      document.getElementById("pronounsInput").value = data.pronouns || "";
+      document.getElementById("birthdayInput").value = data.birthday || "";
+      document.getElementById("add1").value = data.address1 || "";
+      document.getElementById("add2").value = data.address2 || "";
+      document.getElementById("city").value = data.city || "";
+      document.getElementById("state").value = data.state || "";
+      document.getElementById("postal").value = data.postal || "";
+
+      if (data.avatar) {
+        document.getElementById("profileIcon").src = data.avatar;
+        document.querySelector(".profile-picture img").src = data.avatar;
+      }
+    }
+  });
+
+    // Avatar dropdown toggle
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

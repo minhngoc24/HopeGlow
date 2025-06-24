@@ -7,111 +7,77 @@
   <link rel="stylesheet" href="profile.css">
 </head>
 <body>
+  <!-- Navbar -->
   <header>
     <div class="nav-left">
       <h1 class="brand">HopeGlow</h1>
       <nav>
-        <a href="home.html">Home</a>
-        <a href="donate.html">Donate</a>
-        <a href="seekHelp.html">Seek Help</a>
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="donate.html" class="nav-link">Donate</a>
+        <a href="seekHelp.html" class="nav-link">Seek Help</a>
       </nav>
     </div>
-     <!-- Dropdown Avatar -->
-     <div class="dropdown">
+    <!-- Dropdown Avatar -->
+    <div class="dropdown">
       <img id="profileIcon" class="profile-icon" src="default.png" />
       <div class="dropdown-menu" id="dropdownMenu">
-        <a href="profile.html">Edit Profile</a>
+        <a href="profile.html">My Profile</a>
         <a href="index.html">Logout</a>
       </div>
     </div>
   </header>
 
+  <!-- Profile Content -->
   <div class="profile-wrapper">
     <div class="profile-picture">
-      <img src="placeholder.png" alt="Profile Picture">
-      <div class="edit-label">Edit Profile Picture</div>
+      <img id="mainProfilePic" src="placeholder.png" alt="Profile Picture">
     </div>
     <div class="profile-info">
       <div id="displayName" class="display-name">Your Name</div>
+      <p><strong>Username:</strong> <span id="displayUsername">-</span></p>
+      <p><strong>Pronouns:</strong> <span id="displayPronouns">-</span></p>
+      <p><strong>Birthday:</strong> <span id="displayBirthday">-</span></p>
+      <p><strong>Address:</strong> <span id="displayAddress">-</span></p>
 
-      <div class="label">Username</div>
-      <input id="username" type="text" placeholder="Username">
-
-      <div class="label">First Name</div>
-      <input id="firstNameInput" type="text" placeholder="First Name">
-
-      <div class="label">Last Name</div>
-      <input id="lastNameInput" type="text" placeholder="Last Name">
-
-      <div class="label">Pronouns</div>
-      <select>
-        <option>she/her</option>
-        <option>he/him</option>
-        <option>they/them</option>
-        <option>Other</option>
-      </select>
-
-      <div class="label">Birthday</div>
-      <input type="text" placeholder="MM/DD/YYYY">
-
-      <div class="location">Location</div>
-      <div class="location-group">
-        <div class="label">Address line 1</div>
-        <input id="add1" type="text" placeholder="Address Line 1">
-
-        <div class="label">Address line 2</div>
-        <input id="add2" type="text" placeholder="Address Line 2">
-
-        <div class="label">City</div>
-        <input id="city" type="text" placeholder="City">
-
-        <div class="label">State</div>
-        <input id="state" type="text" placeholder="State">
-
-        <div class="label">Postal Code</div>
-        <input id="postal" type="text" placeholder="Postal">
-      </div> 
+      <!-- Edit Button -->
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="editprofile.html">
+          <button class="save-button">Edit Profile</button>
+        </a>
+      </div>
     </div>
-
   </div>
-
-  <div class="fixed-display hidden" id="fixedDisplay">
-    <p><strong>Name:</strong> <span id="displayName">-</span></p>
-    <p><strong>Pronouns:</strong> <span id="displayPronouns">-</span></p>
-    <p><strong>Birthday:</strong> <span id="displayBirthday">-</span></p>
-    <button class="edit-button" id="editBtn">Edit</button>
-  </div>
-</div>
 
   <script>
-    const firstNameInput = document.getElementById("firstNameInput");
-    const lastNameInput = document.getElementById("lastNameInput");
-    const displayName = document.getElementById("displayName");
-
-    function updateDisplayName() {
-      const first = firstNameInput.value.trim();
-      const last = lastNameInput.value.trim();
-      displayName.textContent = `${first} ${last}`.trim() || "Your Name";
-    }
-
-    firstNameInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") updateDisplayName();
-    });
-    lastNameInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") updateDisplayName();
-    });
-
-    // Script for avatar dropdown
+    // Dropdown script
     const profileIcon = document.getElementById("profileIcon");
     const dropdownMenu = document.getElementById("dropdownMenu");
-  
+
     profileIcon.addEventListener("click", function () {
       dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
     });
-  
+
     document.addEventListener("click", function (event) {
       if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
         dropdownMenu.style.display = "none";
+      }
+    });
+
+    // Load data
+    window.addEventListener("DOMContentLoaded", () => {
+      const data = JSON.parse(localStorage.getItem("profileData"));
+      if (data) {
+        document.getElementById("displayName").textContent = `${data.firstName || ""} ${data.lastName || ""}`.trim() || "Your Name";
+        document.getElementById("displayUsername").textContent = data.username || "-";
+        document.getElementById("displayPronouns").textContent = data.pronouns || "-";
+        document.getElementById("displayBirthday").textContent = data.birthday || "-";
+        document.getElementById("displayAddress").textContent =
+          `${data.address1 || ""}, ${data.address2 || ""}, ${data.city || ""}, ${data.state || ""} ${data.postal || ""}`.replace(/^, | ,/g, '');
+
+        if (data.avatar) {
+          document.getElementById("profileIcon").src = data.avatar;
+          document.getElementById("mainProfilePic").src = data.avatar;
+        }
       }
     });
   </script>
