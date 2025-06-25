@@ -33,34 +33,53 @@
   <!-- Upload section -->
   <main class="donate-section">
     <div class="left-preview">
-      <input type="file" id="imageInput" accept="image/*">
-      <img id="previewImage" class="preview-img" style="display: none;">
+      <input type="file" id="imageInput" accept="image/*" multiple>
+      <div id="previewContainer" class="preview-container"></div>
       
     </div>
 
     <div class="description-area">
         
       <h2>Describe Item</h2>
+      <input type="text" id="titleInput" placeholder="Item Title" class="title-input">
       <textarea placeholder="Describe your item here..."></textarea>
       <button class="donate-final">Donate</button>
     </div>
   </main>
 
   <script>
-    const imageInput = document.getElementById('imageInput');
-    const previewImage = document.getElementById('previewImage');
+  const imageInput = document.getElementById('imageInput');
+  const previewContainer = document.getElementById('previewContainer');
 
-    imageInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          previewImage.src = e.target.result;
-          previewImage.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      }
+  imageInput.addEventListener('change', function () {
+    const files = Array.from(this.files);
+    previewContainer.innerHTML = "";
+
+    files.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('preview-wrapper');
+
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.classList.add('preview-img');
+
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('remove-btn');
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+          wrapper.remove();
+        });
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewContainer.appendChild(wrapper);
+      };
+      reader.readAsDataURL(file);
     });
+  });
+
 
     // Script for avatar dropdown
      const profileIcon = document.getElementById("profileIcon");
@@ -75,6 +94,36 @@
         dropdownMenu.style.display = "none";
       }
     });
+
+    const donateBtn = document.querySelector(".donate-final");
+
+  donateBtn.addEventListener("click", () => {
+    const title = document.getElementById("titleInput").value.trim();
+    const firstImg = document.querySelector(".preview-img");
+
+    if (!title || !firstImg) {
+      alert("Please scan an image and enter a title.");
+      return;
+    }
+
+    // Get old items or start with empty array
+    const oldItems = JSON.parse(localStorage.getItem("donatedItems")) || [];
+
+    // Push new item
+    oldItems.unshift({
+      image: firstImg.src,
+      title: title
+    });
+
+    // Save back
+    localStorage.setItem("donatedItems", JSON.stringify(oldItems));
+
+    // Redirect to history.html
+    window.location.href = "history.html";
+});
+
+
+    
   </script>
 </body>
 </html>

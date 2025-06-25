@@ -134,7 +134,7 @@ body {
   }
   
   .description-area textarea {
-    width: 300px;
+    width: 350px;
     height: 150px;
     margin-bottom: 15px;
     font-family: Georgia, serif;
@@ -228,7 +228,7 @@ body {
   }
 
   .title-input {
-    width: 100%;
+    width: 350px;
     padding: 10px;
     font-size: 16px;
     margin-bottom: 15px;

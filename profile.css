@@ -141,3 +141,21 @@ body {
     background-color: #d06b7f;
     transform: scale(1.03);
   }
+
+  .edit-profile-link {
+    display: inline-block;
+    background-color: #e88094;
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 999px;
+    font-size: 18px;
+    text-decoration: none; 
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .edit-profile-link:hover {
+    background-color: #d06b7f;
+    transform: scale(1.03);
+  }
+  
