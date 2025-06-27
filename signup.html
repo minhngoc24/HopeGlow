@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HopeGlow - Sign Up</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <header>
+    <h1>HopeGlow</h1>
+  </header>
+
+<main class="container">
+    <img src="HopeGlow-removebg-preview.png" alt="HopeGlow Logo" class="logo"/>
+    <h2>Welcome to HopeGlow</h2>
+    <h3>Let's create an account</h3>
+    <div class="buttons">
+        <input placeholder="Email" class="email"><br><br>
+        <input placeholder="Password" class="password"><br><br>
+        <input placeholder="Confirm Password" class="confirmpassword"><br><br>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9e53DzkYv5ANo45Jds_gzhu9EFRlars4",
+      authDomain: "hopeglow.firebaseapp.com",
+      projectId: "hopeglow",
+      storageBucket: "hopeglow.firebasestorage.app",
+      messagingSenderId: "880768550420",
+      appId: "1:880768550420:web:bbd0558ba622d5afff8901",
+      measurementId: "G-RBES6WTEP1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const analytics = getAnalytics(app);
+
+    const emailInput = document.querySelector('.email');
+    const passwordInput = document.querySelector('.password');
+    const confirmInput = document.querySelector('.confirmpassword');
+
+    emailInput.addEventListener("keydown", function(event){
+        if(event.key === 'Enter'){
+            passwordInput.focus();
+        }
+    });
+
+    passwordInput.addEventListener("keydown", function(event){
+        if(event.key === 'Enter'){
+            confirmInput.focus();
+        }
+    });
+
+    confirmInput.addEventListener("keydown", function(event){
+        if(event.key === 'Enter'){
+            signUp();
+        }
+    });
+
+    function signUp(){
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if(password !== confirmPassword){
+            alert("Password does not match, please try again");
+        }
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                alert("Welcome to HopeGlow!! Your account has been created successfully")
+                window.location.href = "home.html";
+            })
+
+            .catch((error) => {
+                alert("Sign up error. Please try again");
+                window.location.href = "index.html";
+                
+            });
+
+    }
+</script>

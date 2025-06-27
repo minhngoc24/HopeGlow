@@ -20,7 +20,25 @@
     </div>
   </main>
 
+  <!--Firebase SDK-->
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js"></script>
+
   <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9e53DzkYv5ANo45Jds_gzhu9EFRlars4",
+      authDomain: "hopeglow.firebaseapp.com",
+      projectId: "hopeglow",
+      storageBucket: "hopeglow.firebasestorage.app",
+      messagingSenderId: "880768550420",
+      appId: "1:880768550420:web:bbd0558ba622d5afff8901",
+      measurementId: "G-RBES6WTEP1"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
     const usernameInput = document.querySelector('.username');
     const passwordInput = document.querySelector('.password');
 
@@ -37,9 +55,23 @@
     });
 
     function login(){
+        const email = usernameInput.value;
+        const password = passwordInput.value;
+
+        auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "home.html"; 
+        })
+
+        .catch((error)=>{
+          alert("Login failed");
+          window.location.href = "index.html";
+        })
+        /*
         const usernameInput = document.querySelector('.username');
         const passwordInput = document.querySelector('.password');
         alert("Logging in...\nUsername: " + usernameInput);
+        */
     }
 
   </script>
