@@ -17,14 +17,17 @@
     <h3>Let's create an account</h3>
     <div class="buttons">
         <input placeholder="Email" class="email"><br><br>
-        <input placeholder="Password" class="password"><br><br>
-        <input placeholder="Confirm Password" class="confirmpassword"><br><br>
+        <input type="password" placeholder="Password" class="password"><br><br>
+        <input type="password" placeholder="Confirm Password" class="confirmpassword"><br><br>
     </div>
 </main>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
 
     const firebaseConfig = {
       apiKey: "AIzaSyA9e53DzkYv5ANo45Jds_gzhu9EFRlars4",
@@ -39,6 +42,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const analytics = getAnalytics(app);
+    const db = getFirestore(app);
 
     const emailInput = document.querySelector('.email');
     const passwordInput = document.querySelector('.password');
@@ -65,13 +69,26 @@
     function signUp(){
         const email = emailInput.value.trim();
         const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
+        const confirmPassword = confirmInput.value;
 
         if(password !== confirmPassword){
             alert("Password does not match, please try again");
+            return;
         }
 
         createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+
+                return setDoc(doc(db, "users", user.uid),{
+                    email: user.email,
+                    username: "",
+                    pronouns: "",
+                    birthday: "",
+                    address: "",
+                });
+                
+            })
             .then(() => {
                 alert("Welcome to HopeGlow!! Your account has been created successfully")
                 window.location.href = "home.html";
@@ -85,3 +102,5 @@
 
     }
 </script>
+</body>
+</html>

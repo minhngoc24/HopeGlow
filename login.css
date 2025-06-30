@@ -52,7 +52,11 @@ input:hover {
 }
 
 
-.username::placeholder {
+.email::placeholder {
+    color: #f18585;
+}
+
+.confirmpassword::placeholder {
     color: #f18585;
 }
   
