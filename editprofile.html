@@ -28,12 +28,16 @@
 
   <div class="profile-wrapper">
     <div class="profile-picture">
-      <img src="placeholder.png" alt="Profile Picture">
-      <div class="edit-label">Change Profile Picture</div>
+      <img id="profilePicPreview" src="placeholder.png" alt="Profile Picture">
+      <div class="edit-label" id="changePicBtn" style="cursor:pointer;"> Change Profile Picture</div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+
+      <!--<img src="placeholder.png" alt="Profile Picture">-->
+      <!--<div class="edit-label">Change Profile Picture</div>-->
     </div>
     <div class="profile-info">
       <div class="label">Username</div>
-      <input id="username" type="text" placeholder="Username">
+      <input id="username" type="text" readonly>
 
       <div class="label">First Name</div>
       <input id="firstNameInput" type="text" placeholder="First Name">
@@ -77,27 +81,132 @@
 
   </div>
 
-  <script>
-    const saveBtn = document.getElementById("saveBtn");
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
 
-    saveBtn.addEventListener("click", () => {
-      const profileData = {
-        username: document.getElementById("username").value,
-        firstName: document.getElementById("firstNameInput").value,
-        lastName: document.getElementById("lastNameInput").value,
-        pronouns: document.getElementById("pronounsInput").value,
-        birthday: document.getElementById("birthdayInput").value,
-        address1: document.getElementById("add1").value,
-        address2: document.getElementById("add2").value,
-        city: document.getElementById("city").value,
-        state: document.getElementById("state").value,
-        postal: document.getElementById("postal").value
-      };
 
-      localStorage.setItem("profileData", JSON.stringify(profileData));
-      window.location.href = "profile.html";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvs2IZQBNj00xPHv40C4EjtwAXkO88blw",
+      authDomain: "hopeglow-central.firebaseapp.com",
+      projectId: "hopeglow-central",
+      storageBucket: "hopeglow-central.firebasestorage.app",
+      messagingSenderId: "853220285401",
+      appId: "1:853220285401:web:8a860abba039de3e1f97c8",
+      measurementId: "G-HPS1XMEJNX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let selectedAvatarFile = null;
+
+    //Load existing profile
+    onAuthStateChanged(auth, async(user) =>{
+      if(!user){
+        window.location.href = "index.html";
+        return;
+      }
+
+      console.log("Logged in user:", user);
+
+
+      document.getElementById("username").value = user.email; // Take the email on Firestore to be username
+
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("firstNameInput").value = data.firstName || "";
+        document.getElementById("lastNameInput").value = data.lastName || "";
+        document.getElementById("pronounsInput").value = data.pronouns || "";
+        document.getElementById("birthdayInput").value = data.birthday || "";
+        document.getElementById("add1").value = data.address1 || "";
+        document.getElementById("add2").value = data.address2 || "";
+        document.getElementById("city").value = data.city || "";
+        document.getElementById("state").value = data.state || "";
+        document.getElementById("postal").value = data.postal || "";
+
+        if(data.avatar){
+          document.getElementById("profilePicPreview").src = data.avatar;
+          document.getElementById("profileIcon").src = data.avatar;
+          existingAvatarURL = data.avatar;
+
+        }
+      }
     });
 
+    
+
+    const saveBtn = document.getElementById("saveBtn");
+
+    saveBtn.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        let avatarURL = null;
+
+        if (selectedAvatarFile) {
+          const storageRef = ref(storage, `avatars/${user.uid}`);
+          await uploadBytes(storageRef, selectedAvatarFile);
+          avatarURL = await getDownloadURL(storageRef);
+        }
+
+        if (!avatarURL && existingAvatarURL) {
+          avatarURL = existingAvatarURL;
+        }
+
+        const profileData = {
+          username: user.email,
+          firstName: document.getElementById("firstNameInput").value,
+          lastName: document.getElementById("lastNameInput").value,
+          pronouns: document.getElementById("pronounsInput").value,
+          birthday: document.getElementById("birthdayInput").value,
+          address1: document.getElementById("add1").value,
+          address2: document.getElementById("add2").value,
+          city: document.getElementById("city").value,
+          state: document.getElementById("state").value,
+          postal: document.getElementById("postal").value,
+          avatar: avatarURL
+        };
+
+        if (avatarURL) {
+          profileData.avatar = avatarURL;
+        }
+
+        await setDoc(doc(db, "users", user.uid), profileData, { merge: true });
+
+        alert("Saved successfully!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        alert("Failed to save. Possible issue with Firebase config or image upload.");
+      }
+    });
+
+     // Avatar change
+     document.getElementById("changePicBtn").addEventListener("click", () => {
+      document.getElementById("avatarInput").click();
+    });
+
+    document.getElementById("avatarInput").addEventListener("change", (event) => {
+      selectedAvatarFile = event.target.files[0];
+      if (selectedAvatarFile) {
+        const previewUrl = URL.createObjectURL(selectedAvatarFile);
+        document.getElementById("profilePicPreview").src = previewUrl;
+        document.getElementById("profileIcon").src = previewUrl;
+      }
+    });
+
+
+/*
     window.addEventListener("DOMContentLoaded", () => {
     const data = JSON.parse(localStorage.getItem("profileData"));
     if (data) {
@@ -118,6 +227,7 @@
       }
     }
   });
+  */
 
     // Avatar dropdown toggle
     const profileIcon = document.getElementById("profileIcon");
