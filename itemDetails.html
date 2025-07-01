@@ -1,0 +1,110 @@
+<!-- itemDetails.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Item Details</title>
+</head>
+<body>
+  <h2 id="title"></h2>
+  <img id="image" src="" style="width: 200px;">
+  <p id="description"></p>
+
+  <input type="file" id="editImage"><br>
+  <input type="text" id="editTitle" placeholder="Edit Title"><br>
+  <textarea id="editDescription" placeholder="Edit Description"></textarea><br>
+
+  <button id="saveEdit">Save Edit</button>
+  <button id="deleteItem">Delete Item</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getStorage, ref, deleteObject, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { firebaseConfig } from "./public/firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const auth = getAuth(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get("id");
+
+    const titleEl = document.getElementById("title");
+    const imageEl = document.getElementById("image");
+    const descEl = document.getElementById("description");
+
+    const editTitle = document.getElementById("editTitle");
+    const editDesc = document.getElementById("editDescription");
+    const editImage = document.getElementById("editImage");
+    let currentImageUrl = "";
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const docRef = doc(db, "donations", itemId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        titleEl.textContent = data.title;
+        imageEl.src = data.imageUrl;
+        descEl.textContent = data.description;
+
+        editTitle.value = data.title;
+        editDesc.value = data.description;
+        currentImageUrl = data.imageUrl;
+      }
+    });
+
+    // DELETE
+    document.getElementById("deleteItem").addEventListener("click", async () => {
+      const confirmDelete = confirm("Are you sure you want to delete this item?");
+      if (!confirmDelete) return;
+
+      try {
+        const storageRef = ref(storage, decodeURIComponent(currentImageUrl.split("/").slice(-1)[0].split("?")[0]));
+        await deleteObject(storageRef); // Delete from storage
+      } catch (e) {
+        console.warn("Storage delete failed:", e.message);
+      }
+
+      await deleteDoc(doc(db, "donations", itemId)); // Delete from Firestore
+      alert("Item deleted.");
+      window.location.href = "history.html";
+    });
+
+    // EDIT
+    document.getElementById("saveEdit").addEventListener("click", async () => {
+      const newTitle = editTitle.value;
+      const newDesc = editDesc.value;
+      const file = editImage.files[0];
+
+      const updates = { title: newTitle, description: newDesc };
+
+      if (file) {
+        const storageRef = ref(storage, `donatedItems/${auth.currentUser.uid}/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        const newUrl = await getDownloadURL(storageRef);
+        updates.imageUrl = newUrl;
+
+        // Delete old image
+        try {
+          const oldRef = ref(storage, decodeURIComponent(currentImageUrl.split("/").slice(-1)[0].split("?")[0]));
+          await deleteObject(oldRef);
+        } catch (e) {
+          console.warn("Old image delete failed:", e.message);
+        }
+      }
+
+      await updateDoc(doc(db, "donations", itemId), updates);
+      alert("Item updated.");
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

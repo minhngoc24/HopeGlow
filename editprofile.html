@@ -31,9 +31,6 @@
       <img id="profilePicPreview" src="placeholder.png" alt="Profile Picture">
       <div class="edit-label" id="changePicBtn" style="cursor:pointer;"> Change Profile Picture</div>
       <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-
-      <!--<img src="placeholder.png" alt="Profile Picture">-->
-      <!--<div class="edit-label">Change Profile Picture</div>-->
     </div>
     <div class="profile-info">
       <div class="label">Username</div>
@@ -98,7 +95,7 @@
     let existingAvatarURL = null;
 
     //Load existing profile
-    onAuthStateChanged(auth, async(user) =>{
+    onAuthStateChanged(auth, async(user) =>{ // async is used for await function 
       if(!user){
         window.location.href = "index.html";
         return;
@@ -106,11 +103,10 @@
 
       console.log("Logged in user:", user);
 
-
       document.getElementById("username").value = user.email; // Take the email on Firestore to be username
 
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+      const docRef = doc(db, "users", user.uid); // make reference for a document in Firestore => make the ref to users/user.uid
+      const docSnap = await getDoc(docRef); // get that document file
 
       if(docSnap.exists()) {
         const data = docSnap.data();
@@ -127,13 +123,10 @@
         if(data.avatar){
           document.getElementById("profilePicPreview").src = data.avatar;
           document.getElementById("profileIcon").src = data.avatar;
-          existingAvatarURL = data.avatar;
-
+          existingAvatarURL = data.avatar; 
         }
       }
     });
-
-    
 
     const saveBtn = document.getElementById("saveBtn");
 
@@ -145,9 +138,9 @@
         let avatarURL = null;
 
         if (selectedAvatarFile) {
-          const storageRef = ref(storage, `avatars/${user.uid}`);
-          await uploadBytes(storageRef, selectedAvatarFile);
-          avatarURL = await getDownloadURL(storageRef);
+          const storageRef = ref(storage, `avatars/${user.uid}`); // make reference for the avatar
+          await uploadBytes(storageRef, selectedAvatarFile); // upload the selected avatar to the reference storageRef
+          avatarURL = await getDownloadURL(storageRef); // get the public URL to show on the website
         }
 
         if (!avatarURL && existingAvatarURL) {
@@ -182,12 +175,12 @@
     });
 
      // Avatar change
-     document.getElementById("changePicBtn").addEventListener("click", () => {
+      document.getElementById("changePicBtn").addEventListener("click", () => {
       document.getElementById("avatarInput").click();
     });
 
     document.getElementById("avatarInput").addEventListener("change", (event) => {
-      selectedAvatarFile = event.target.files[0];
+      selectedAvatarFile = event.target.files[0]; // take the selected file
       if (selectedAvatarFile) {
         const previewUrl = URL.createObjectURL(selectedAvatarFile);
         document.getElementById("profilePicPreview").src = previewUrl;
