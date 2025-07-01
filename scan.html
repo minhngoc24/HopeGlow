@@ -59,16 +59,7 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBvs2IZQBNj00xPHv40C4EjtwAXkO88blw",
-      authDomain: "hopeglow-central.firebaseapp.com",
-      projectId: "hopeglow-central",
-      storageBucket: "hopeglow-central.firebasestorage.app",
-      messagingSenderId: "853220285401",
-      appId: "1:853220285401:web:8a860abba039de3e1f97c8",
-      measurementId: "G-HPS1XMEJNX"
-    };
+    import { firebaseConfig } from "./public/firebase-config.js";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -92,7 +83,7 @@
         window.location.href = "index.html";
       }
     });
-    
+
     // Script for logout
     const logOut = document.querySelector('a[href="index.html"]');
     logOut.addEventListener("click", function(e){

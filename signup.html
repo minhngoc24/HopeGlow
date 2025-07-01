@@ -27,17 +27,7 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBvs2IZQBNj00xPHv40C4EjtwAXkO88blw",
-      authDomain: "hopeglow-central.firebaseapp.com",
-      projectId: "hopeglow-central",
-      storageBucket: "hopeglow-central.firebasestorage.app",
-      messagingSenderId: "853220285401",
-      appId: "1:853220285401:web:8a860abba039de3e1f97c8",
-      measurementId: "G-HPS1XMEJNX"
-    };
+    import { firebaseConfig } from "./public/firebase-config.js";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
