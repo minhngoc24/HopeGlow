@@ -95,6 +95,7 @@
     const storage = getStorage(app);
 
     let selectedAvatarFile = null;
+    let existingAvatarURL = null;
 
     //Load existing profile
     onAuthStateChanged(auth, async(user) =>{
@@ -194,29 +195,6 @@
       }
     });
 
-
-/*
-    window.addEventListener("DOMContentLoaded", () => {
-    const data = JSON.parse(localStorage.getItem("profileData"));
-    if (data) {
-      document.getElementById("username").value = data.username || "";
-      document.getElementById("firstNameInput").value = data.firstName || "";
-      document.getElementById("lastNameInput").value = data.lastName || "";
-      document.getElementById("pronounsInput").value = data.pronouns || "";
-      document.getElementById("birthdayInput").value = data.birthday || "";
-      document.getElementById("add1").value = data.address1 || "";
-      document.getElementById("add2").value = data.address2 || "";
-      document.getElementById("city").value = data.city || "";
-      document.getElementById("state").value = data.state || "";
-      document.getElementById("postal").value = data.postal || "";
-
-      if (data.avatar) {
-        document.getElementById("profileIcon").src = data.avatar;
-        document.querySelector(".profile-picture img").src = data.avatar;
-      }
-    }
-  });
-  */
 
     // Avatar dropdown toggle
     const profileIcon = document.getElementById("profileIcon");
