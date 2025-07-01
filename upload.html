@@ -20,7 +20,7 @@
     </div>
     <!-- Dropdown Avatar -->
     <div class="dropdown">
-      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <img id="profileIcon" class="profile-icon" src="https://via.placeholder.com/40" />
       <div class="dropdown-menu" id="dropdownMenu">
         <a href="profile.html">My Profile</a>
         <a href="history.html">History</a>
@@ -53,11 +53,14 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import { firebaseConfig } from "./public/firebase-config.js";
+    import {collection, addDoc, Timestamp} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
 
     onAuthStateChanged(auth, async (user) => {
@@ -138,31 +141,47 @@
       }
     });
 
-    const donateBtn = document.querySelector(".donate-final");
+  const donateBtn = document.querySelector(".donate-final");
 
-  donateBtn.addEventListener("click", () => {
+  donateBtn.addEventListener("click", async() => {
     const title = document.getElementById("titleInput").value.trim();
-    const firstImg = document.querySelector(".preview-img");
+    const file = imageInput.files[0];
+    const description = document.querySelector("textarea").value.trim();
+    const user = auth.currentUser;
+    if (!user) {
+      alert("You must be logged in to donate.");
+      return;
+    }
 
-    if (!title || !firstImg) {
+    if (!title || !file || !description) {
       alert("Please scan an image and enter a title.");
       return;
     }
 
-    // Get old items or start with empty array
-    const oldItems = JSON.parse(localStorage.getItem("donatedItems")) || [];
-
-    // Push new item
-    oldItems.unshift({
-      image: firstImg.src,
-      title: title
-    });
-
-    // Save back
-    localStorage.setItem("donatedItems", JSON.stringify(oldItems));
-
-    // Redirect to history.html
-    window.location.href = "history.html";
+    try{
+      // Upload image to Firebase Storage
+      console.log("Uploading image...");
+      const storageRef = ref(storage, `donatedItems/${user.uid}/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      console.log("Image uploaded successfully:", snapshot);
+      // Get the download URL of the uploaded image
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log("Download URL:", downloadURL);
+      // Upload the image file
+      await addDoc(collection(db, "donations"), {
+            userId: user.uid,
+            title: title,
+            description: description,
+            imageUrl: downloadURL,
+            timestamp: Timestamp.now()
+          })
+      alert("Item donated successfully!");
+      // Redirect to history.html
+      window.location.href = "history.html";
+    } catch (error) {
+      console.error("Error uploading item:", error);
+      alert("Failed to donate item. Please try again.");
+    }
 });
 
 
