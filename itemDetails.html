@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +8,7 @@
 </head>
 <body>
 
-    <!-- Navbar -->
+  <!-- Navbar -->
   <header>
     <div class="nav-left">
       <h1 class="brand">HopeGlow</h1>
@@ -26,26 +27,40 @@
         <a href="index.html">Logout</a>
       </div>
     </div>
-    
   </header>
 
-  <h2 id="title"></h2>
-  <img id="image" src="" style="width: 200px;">
-  <p id="description"></p>
+  <!-- Item Details Section -->
+  <main class="item-details-section">
+    <div class="left-preview">
+      <img id="itemImage" src="" alt="Item Image" class="item-image">
+    </div>
 
-  <input type="file" id="editImage"><br>
-  <input type="text" id="editTitle" placeholder="Edit Title"><br>
-  <textarea id="editDescription" placeholder="Edit Description"></textarea><br>
+    <div class="description-area">
+      <!-- Static content -->
+      <h2 id="title"></h2>
+      <p id="description"></p>
+      <div class="btn">
+        <button id="editToggle">Edit</button>
+        <button id="deleteItem">Delete Item</button>
+      </div>
 
-  <button id="saveEdit">Save Edit</button>
-  <button id="deleteItem">Delete Item</button>
+      
+      <!-- Edit form, hidden by default -->
+      <div id="editForm" style="display: none;">
+        <input type="file" id="editImage"><br>
+        <input type="text" id="editTitle" placeholder="Edit Title"><br>
+        <textarea id="editDescription" placeholder="Edit Description"></textarea><br>
+        <button id="saveEdit">Save Edit</button>
+      </div>
+    </div>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getFirestore, doc, getDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import { getStorage, ref, deleteObject, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
     import { firebaseConfig } from "./public/firebase-config.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -56,12 +71,15 @@
     const itemId = urlParams.get("id");
 
     const titleEl = document.getElementById("title");
-    const imageEl = document.getElementById("image");
+    const imageEl = document.getElementById("itemImage");
     const descEl = document.getElementById("description");
 
     const editTitle = document.getElementById("editTitle");
     const editDesc = document.getElementById("editDescription");
     const editImage = document.getElementById("editImage");
+    const editForm = document.getElementById("editForm");
+    const editToggle = document.getElementById("editToggle");
+
     let currentImageUrl = "";
 
     onAuthStateChanged(auth, async (user) => {
@@ -70,8 +88,12 @@
         return;
       }
 
+      localStorage.setItem("uid", user.uid);
+
+      const docUserRef = doc(db, "users", user.uid);
       const docRef = doc(db, "donations", itemId);
       const docSnap = await getDoc(docRef);
+
       if (docSnap.exists()) {
         const data = docSnap.data();
         titleEl.textContent = data.title;
@@ -82,6 +104,20 @@
         editDesc.value = data.description;
         currentImageUrl = data.imageUrl;
       }
+
+      const docUserSnap = await getDoc(docUserRef);
+      if (docUserSnap.exists()) {
+        const userData = docUserSnap.data();
+        if (userData.avatar) {
+          document.getElementById("profileIcon").src = userData.avatar;
+        }
+      }
+    });
+
+    // Toggle edit form visibility
+    editToggle.addEventListener("click", () => {
+      editForm.style.display = "block";
+      editToggle.style.display = "none";
     });
 
     // DELETE
@@ -91,12 +127,12 @@
 
       try {
         const storageRef = ref(storage, decodeURIComponent(currentImageUrl.split("/").slice(-1)[0].split("?")[0]));
-        await deleteObject(storageRef); // Delete from storage
+        await deleteObject(storageRef);
       } catch (e) {
         console.warn("Storage delete failed:", e.message);
       }
 
-      await deleteDoc(doc(db, "donations", itemId)); // Delete from Firestore
+      await deleteDoc(doc(db, "donations", itemId));
       alert("Item deleted.");
       window.location.href = "history.html";
     });
@@ -127,6 +163,33 @@
       await updateDoc(doc(db, "donations", itemId), updates);
       alert("Item updated.");
       window.location.reload();
+    });
+
+    // Logout
+    const logOut = document.querySelector('a[href="index.html"]');
+    logOut.addEventListener("click", function(e){
+      e.preventDefault();
+      signOut(auth)
+        .then(() => {
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          alert("Cannot sign out. Please try again");
+        });
+    });
+
+    // Dropdown script
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    profileIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
     });
   </script>
 </body>

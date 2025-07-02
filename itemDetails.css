@@ -1,211 +1,195 @@
 /* Reset */
 body {
-    margin: 0;
-    font-family: Georgia, serif;
-    background-color: white;
-  }
-  
-  /* Navbar styles */
-  header {
-    background-color: #e88094;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 25px;
-  }
-  
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .brand {
-    color: white;
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  nav {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .nav-link {
-    color: black;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-  }
-  
-  .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  .nav-link.active {
-    background-color: white;
-    font-weight: bold;
-  }
-  
-  /* Dropdown styles */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .profile-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #ddd;
-    cursor: pointer;
-  }
-  
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: 180px;
-    z-index: 1000;
-  }
-  
-  .dropdown-menu a {
-    display: block;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: black;
-  }
-  
-  .dropdown-menu a:hover {
-    background-color: #f0f0f0;
-  }
-  
-  /* Center layout for item details */
-  main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 80px); /* Adjust for navbar height */
-    padding: 40px 20px;
-  }
-  
-  .item-details {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    max-width: 1000px;
-    width: 100%;
-  }
-  
-  /* Left side - image */
-  .item-details img {
-    max-width: 300px;
-    border-radius: 8px;
-  }
-  
-  /* Right side - content */
-  .item-details .content {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .item-details .content h1 {
-    font-size: 28px;
-    margin: 0;
-  }
-  
-  .item-details .content p,
-  .item-details .content input,
-  .item-details .content textarea {
-    font-size: 16px;
-    line-height: 1.5;
-    width: 100%;
-  }
-  
-  .item-details .content input,
-  .item-details .content textarea {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    resize: vertical;
-  }
-  
-  .item-details .content .actions {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .item-details .content .actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .item-details .content .actions .edit {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .item-details .content .actions .edit:hover {
-    background-color: #2980b9;
-  }
-  
-  .item-details .content .actions .delete {
-    background-color: #e74c3c;
-    color: white;
-  }
-  
-  .item-details .content .actions .delete:hover {
-    background-color: #c0392b;
-  }
-    /* This is for the dropdown*/
-    .dropdown {
-        position: relative;
-        display: inline-block;
-      }
-      
-      .profile-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #ddd;
-        cursor: pointer;
-      }
-      
-      .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 50px;
-        right: 0;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-        min-width: 180px;
-        z-index: 1000;
-      }
-      
-      .dropdown-menu a {
-        display: block;
-        padding: 10px 20px;
-        text-decoration: none;
-        color: black;
-      }
-      
-      .dropdown-menu a:hover {
-        background-color: #f0f0f0;
-      }
-       
-      
-  
+  margin: 0;
+  font-family: Georgia, serif;
+  background-color: white;
+}
+
+/* Navbar styles */
+header {
+  background-color: #e88094;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 25px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand {
+  color: white;
+  margin: 0;
+  font-size: 24px;
+}
+
+nav {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-link {
+  color: black;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link.active {
+  background-color: white;
+  font-weight: bold;
+}
+
+/* Profile Dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  min-width: 180px;
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Main layout */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px; /* Increased spacing between image and form */
+  padding: 40px 20px;
+  flex-wrap: wrap;
+}
+
+/* Left image preview */
+.left-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+/* Right description area */
+.description-area {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 12px;
+}
+
+.description-area h2 {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 24px;
+}
+
+.description-area p {
+  color: #444;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.description-area input,
+.description-area textarea {
+  font-size: 16px;
+  padding: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 50px; 
+}
+
+.description-area input[type="file"] {
+  padding: 12px 14px;
+  font-size: 16px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.description-area button {
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+}
+
+/* Individual button styles */
+#editToggle {
+  background-color: #f39c12;
+  color: white;
+}
+
+#editToggle:hover {
+  background-color: #d68910;
+}
+
+#saveEdit {
+  background-color: #3498db;
+  color: white;
+}
+
+#saveEdit:hover {
+  background-color: #2980b9;
+}
+
+#deleteItem {
+  background-color: #e74c3c;
+  color: white;
+}
+
+#deleteItem:hover {
+  background-color: #c0392b;
+}
