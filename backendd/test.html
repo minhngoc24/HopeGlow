@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test OpenAI Flask API</title>
+</head>
+<body>
+  <h1>Generate Product Description</h1>
+  <input type="text" id="titleInput" placeholder="Enter product title">
+  <button onclick="generate()">Generate</button>
+  <p id="result"></p>
+
+  <script>
+    async function generate() {
+      const title = document.getElementById('titleInput').value;
+      if (!title) {
+        alert('Please enter a title');
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title })
+      });
+
+      const data = await response.json();
+      document.getElementById('result').innerText = data.description || data.error;
+    }
+  </script>
+</body>
+</html>
