@@ -91,7 +91,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 80px; /* Increased spacing between image and form */
+  gap: 80px;
   padding: 40px 20px;
   flex-wrap: wrap;
 }
@@ -116,6 +116,7 @@ main {
 .description-area {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   max-width: 400px;
   gap: 12px;
 }
@@ -132,6 +133,7 @@ main {
   line-height: 1.4;
 }
 
+/* Input fields */
 .description-area input,
 .description-area textarea {
   font-size: 16px;
@@ -155,41 +157,65 @@ main {
 }
 
 .description-area button {
-  padding: 14px;
+  padding: 14px 28px;
   font-size: 16px;
-  border-radius: 8px;
+  font-weight: bold;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   transition: all 0.25s ease;
   width: 100%;
   box-sizing: border-box;
-  margin-top: 6px;
 }
 
-/* Individual button styles */
+/* Button row */
+.btn {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+/* Individual buttons inside .btn row */
+.btn button {
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Button styles */
 #editToggle {
-  background-color: #f39c12;
+  background-color: #e88094;
   color: white;
 }
 
 #editToggle:hover {
-  background-color: #d68910;
+  background-color: #d66b7e;
+  transform: scale(1.05);
 }
 
 #saveEdit {
-  background-color: #3498db;
+  background-color: #e88094;
   color: white;
 }
 
 #saveEdit:hover {
-  background-color: #2980b9;
+  background-color: #d66b7e;
+  transform: scale(1.05);
 }
 
 #deleteItem {
-  background-color: #e74c3c;
+  background-color: #160402;
   color: white;
 }
 
 #deleteItem:hover {
-  background-color: #c0392b;
+  background-color: #333;
+  transform: scale(1.05);
 }

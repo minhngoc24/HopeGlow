@@ -5,18 +5,28 @@ const imagePreview = document.getElementById("imagePreview");
 const scanSection = document.getElementById("scanSection");
 const donateSection = document.getElementById("donateSection");
 const addMoreBtn = document.getElementById("addMoreBtn");
-
+const titleInput = document.getElementById("titleInput"); // Input for title
+const descInput = document.getElementById("descInput"); // Input for description
+// open camera stream
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
     video.srcObject = stream;
+  })
+  .catch(err => {
+    console.error("Error accessing the camera: ", err);
+    alert("Could not access the camera. Please check your permissions.");
   });
 
-snap.addEventListener("click", () => {
+// Load model AI
+let modelPromise = cocoSsd.load(); // Ensure cocoSsd is loaded before using it
+
+snap.addEventListener("click", async() => {
   // Capture snapshot
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   canvas.getContext("2d").drawImage(video, 0, 0);
   const imgURL = canvas.toDataURL("image/png");
+
 
   const wrapper = document.createElement("div");
   wrapper.classList.add("preview-wrapper");
@@ -36,6 +46,22 @@ snap.addEventListener("click", () => {
   wrapper.appendChild(closeBtn);
   imagePreview.appendChild(wrapper);
 
+  // Run object detection
+  const model = await modelPromise;
+  const predictions = await model.detect(canvas);
+  console.log(predictions);
+
+  // Check if any object is detected
+  const hasObject = predictions.length > 0;
+  if (hasObject) {
+    const best = predictions[0];
+    titleInput.value = best.class;
+    descInput.value = best.class; // Set title to the first detected object's class
+  }else{
+    titleInput.value = " No object detected"; 
+    descInput.value = "No object detected"; 
+  }
+  
   // Hide scan, show donate
   scanSection.style.display = "none";
   donateSection.style.display = "flex";
