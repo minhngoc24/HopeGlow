@@ -35,6 +35,7 @@
         <input type="text" class="search-input" placeholder="Search item">
         <button class="search-button">Search</button>
     </div>
+    <div id="searchResults" class="search-results"></div>
   </main>
 
   <script type="module">
@@ -43,16 +44,16 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import { firebaseConfig } from "./public/firebase-config.js";
-
+  
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
-
+  
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         localStorage.setItem("uid", user.uid);
-
+  
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -65,31 +66,70 @@
         window.location.href = "index.html";
       }
     });
+  
+    // SEARCH FUNCTION STARTS HERE
+    const searchInput = document.querySelector('.search-input');
+    const searchButton = document.querySelector('.search-button');
+    const searchResultsDiv = document.getElementById('searchResults');
+  
+    searchButton.addEventListener("click", performSearch);
+    searchInput.addEventListener("keydown", function(event){
+      if(event.key === 'Enter'){
+        performSearch();
+      }
+    });
+  
+    async function performSearch() {
+      const query = searchInput.value.trim();
+      const currentUserId = localStorage.getItem("uid");
+  
+      if (!query) return;
+  
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/search?q=${encodeURIComponent(query)}&user_id=${currentUserId}`);
+        const data = await response.json();
+  
+        displayResults(data.results);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        alert("An error occurred while searching. Please try again.");
+      }
+    }
+  
+    function displayResults(items) {
+      searchResultsDiv.innerHTML = '';
 
+      if (items.length === 0) {
+        searchResultsDiv.innerHTML = "<p>No results found.</p>";
+        return;
+      }
 
-    // Script for logout
+      items.forEach(item => {
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("search-card");
+
+        itemDiv.innerHTML = `
+          <img src="${item.image_url || 'default.png'}" alt="${item.title}">
+          <h3>${item.title}</h3>
+          <p>${item.description}</p>
+          <p>Contact: ${item.contact_info || ''}</p>
+        `;
+
+        searchResultsDiv.appendChild(itemDiv);
+      });
+    }
+  
+    // LOGOUT & DROPDOWN
     const logOut = document.querySelector('a[href="index.html"]');
     logOut.addEventListener("click", function(e){
       e.preventDefault();
-      signOut(auth)
-        .then(() => {
-          window.location.href = "index.html";
-        })
-
-        .catch((error) => {
-          alert("Cannot sign out. Please try again");
-        });
+      signOut(auth).then(() => {
+        window.location.href = "index.html";
+      }).catch((error) => {
+        alert("Cannot sign out. Please try again");
+      });
     });
-    
-    const search = document.querySelector('.search-bar');
-
-    search.addEventListener("keydown", function(event){
-      if(event.key === 'Enter'){
-        alert("Searching an item");
-      }
-    })
-
-     // Script for avatar dropdown
+  
     const profileIcon = document.getElementById("profileIcon");
     const dropdownMenu = document.getElementById("dropdownMenu");
   
@@ -102,6 +142,7 @@
         dropdownMenu.style.display = "none";
       }
     });
-    </script>
+  </script>
+  
 </body>
 </html>

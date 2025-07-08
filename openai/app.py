@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 api_key = os.getenv("OPENAI_API_KEY")
-print("API KEY:", api_key)  # kiểm tra key
+print("API KEY:", api_key) 
 
 openai.api_key = api_key
 
@@ -31,7 +31,7 @@ def generate():
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=100,
+            max_tokens=500,
             temperature=0.7
         )
         description = response.choices[0].message.content.strip()
@@ -40,5 +40,6 @@ def generate():
         print(f"Error: {e}")
         return jsonify({'error': 'Failed to generate description'}), 500
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5001)
