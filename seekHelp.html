@@ -109,17 +109,18 @@
         itemDiv.classList.add("search-card");
 
         itemDiv.innerHTML = `
-          <img src="${item.image_url || 'default.png'}" alt="${item.title}">
-          <h3>${item.title}</h3>
-          <p>${item.description}</p>
-          <p>Contact: ${item.contact_info || ''}</p>
-        `;
+        <div class="image-wrapper">
+          <img src="${item.imageUrl}" alt="${item.title}">
+        </div>
+        <h3 class="item-title">${item.title}</h3>
+      `;
+        console.log('Item:', item);
+        console.log('Image URL:', item.imageUrl);
 
         searchResultsDiv.appendChild(itemDiv);
       });
     }
   
-    // LOGOUT & DROPDOWN
     const logOut = document.querySelector('a[href="index.html"]');
     logOut.addEventListener("click", function(e){
       e.preventDefault();

@@ -1,3 +1,18 @@
+import{initializeApp}from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+import { firebaseConfig } from "./public/firebase-config.js";
+import {collection, addDoc, Timestamp} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
+import { uploadString } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const snap = document.getElementById("snap");
@@ -89,7 +104,45 @@ addMoreBtn.addEventListener("click", () => {
  });
 
   const donateBtn = document.querySelector(".donate-final");
+  donateBtn.addEventListener("click", async () => {
+    const title = document.getElementById("titleInput").value.trim();
+    const description = document.getElementById("descInput").value.trim();
+    const firstImg = document.querySelector(".preview-img");
 
+    const user = auth.currentUser;
+    if (!user) {
+      alert("You must be logged in to donate.");
+      return;
+    }
+    if (!title || !firstImg) {
+      alert("Please scan an image and enter a title.");
+      return;
+    }
+
+    try{
+      console.log("Uploading image...");
+      const storageRef = ref(storage, `donatedItems/${user.uid}/${Date.now()}.png`);
+      const snapshot = await uploadString(storageRef, firstImg.src, 'data_url');
+      console.log("Image uploaded successfully:", snapshot);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log("Download URL:", downloadURL);
+
+      await addDoc(collection(db, "donations"), {
+        userId: user.uid,
+        title: title,
+        description: description,
+        imageUrl: downloadURL,
+        timestamp: Timestamp.now()
+      });
+  
+      alert("Item uploaded successfully!");
+      window.location.href = "history.html";
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Failed to upload. Please try again.");
+    }
+  });
+  /*
   donateBtn.addEventListener("click", () => {
     const title = document.getElementById("titleInput").value.trim();
     const firstImg = document.querySelector(".preview-img");
@@ -114,3 +167,5 @@ addMoreBtn.addEventListener("click", () => {
     // Redirect to history.html
     window.location.href = "history.html";
 });
+*/
+
