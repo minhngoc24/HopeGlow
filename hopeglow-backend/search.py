@@ -33,7 +33,7 @@ def search_items():
                     'title': data.get('title', ''),
                     'description': data.get('description', ''),
                     'donor_id': donor_id,
-                    'image_url': data.get('image_url', ''),
+                    'imageUrl': data.get('imageUrl', ''),
                     'contact_info': data.get('contact_info', '')
                 })
     return jsonify({'results' : matching_items})
