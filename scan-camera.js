@@ -142,30 +142,5 @@ addMoreBtn.addEventListener("click", () => {
       alert("Failed to upload. Please try again.");
     }
   });
-  /*
-  donateBtn.addEventListener("click", () => {
-    const title = document.getElementById("titleInput").value.trim();
-    const firstImg = document.querySelector(".preview-img");
-
-    if (!title || !firstImg) {
-      alert("Please scan an image and enter a title.");
-      return;
-    }
-
-    // Get old items or start with empty array
-    const oldItems = JSON.parse(localStorage.getItem("donatedItems")) || [];
-
-    // Push new item
-    oldItems.unshift({
-      image: firstImg.src,
-      title: title
-    });
-
-    // Save back
-    localStorage.setItem("donatedItems", JSON.stringify(oldItems));
-
-    // Redirect to history.html
-    window.location.href = "history.html";
-});
-*/
+ 
 
