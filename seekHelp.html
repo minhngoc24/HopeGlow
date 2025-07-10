@@ -108,6 +108,9 @@
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("search-card");
 
+        itemDiv.classList.add("search-card");
+        itemDiv.setAttribute("data-id", item.id);
+
         itemDiv.innerHTML = `
         <div class="image-wrapper">
           <img src="${item.imageUrl}" alt="${item.title}">
@@ -117,10 +120,14 @@
         console.log('Item:', item);
         console.log('Image URL:', item.imageUrl);
 
+        itemDiv.addEventListener("click", () => {
+          window.location.href = `items_search.html?id=${item.id}`;
+        });
+
         searchResultsDiv.appendChild(itemDiv);
+
       });
     }
-  
     const logOut = document.querySelector('a[href="index.html"]');
     logOut.addEventListener("click", function(e){
       e.preventDefault();

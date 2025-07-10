@@ -22,6 +22,7 @@ const donateSection = document.getElementById("donateSection");
 const addMoreBtn = document.getElementById("addMoreBtn");
 const titleInput = document.getElementById("titleInput"); // Input for title
 const descInput = document.getElementById("descInput"); // Input for description
+const pickUpAddr = document.getElementById("pickUpAddr"); // Input for pickup address
 // open camera stream
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
@@ -108,14 +109,15 @@ addMoreBtn.addEventListener("click", () => {
     const title = document.getElementById("titleInput").value.trim();
     const description = document.getElementById("descInput").value.trim();
     const firstImg = document.querySelector(".preview-img");
+    const pickUpAddress = document.getElementById("pickUpAddr").value.trim();
 
     const user = auth.currentUser;
     if (!user) {
       alert("You must be logged in to donate.");
       return;
     }
-    if (!title || !firstImg) {
-      alert("Please scan an image and enter a title.");
+    if (!title || !firstImg || !pickUpAddr) {
+      alert("Please scan an image and enter a title and pickup address.");
       return;
     }
 
@@ -132,6 +134,7 @@ addMoreBtn.addEventListener("click", () => {
         title: title,
         description: description,
         imageUrl: downloadURL,
+        pickUpAddress: pickUpAddress,
         timestamp: Timestamp.now()
       });
   

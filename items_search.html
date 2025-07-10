@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HopeGlow - Item Details</title>
+  <link rel="stylesheet" href="itemDetails.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <h1 class="brand">HopeGlow</h1>
+      <nav>
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="donate.html" class="nav-link">Donate</a>
+        <a href="seekHelp.html" class="nav-link">Seek Help</a>
+      </nav>
+    </div>
+    <div class="dropdown">
+      <img id="profileIcon" class="profile-icon" src="default.png" />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">My Profile</a>
+        <a href="history.html">History</a>
+        <a href="index.html">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="item-details-section">
+    <div class="left-preview">
+      <img id="itemImage" src="" alt="Item Image" class="item-image">
+    </div>
+
+    <div class="description-area">
+      <h2 id="title">Loading...</h2>
+      <p id="description"></p>
+      <p id="option">Choose Pickup/Delivery option</p>
+      <div class="btn">
+        <button id="pickup">Pick Up</button>
+        <button id="delivery">Delivery</button>
+      </div>   
+
+      <div id="pickupInfo" class="pickup-info" style="display: none;">
+        <h3>Please pick up at:</h3>
+        <div class="address-box" id="addressBox"></div>
+        <button id="requestPickup" style="margin-top: 12px; padding: 10px 20px; background-color: #e88094; color: white; border: none; border-radius: 8px; cursor: pointer;">Request</button>
+      </div>  
+
+      <div id="deliveryInfo" class="delivery-info" style="display: none;">
+        <h3>Enter Delivery Address:</h3>
+        <div class="delivery-box">
+          <input type="text" id="deliveryAddress" placeholder="Your delivery address">
+          <button id="requestDelivery">Request</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { firebaseConfig } from "./public/firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get("id");
+
+    const titleEl = document.getElementById("title");
+    const descriptionEl = document.getElementById("description");
+    const itemImageEl = document.getElementById("itemImage");
+    const pickupButton = document.getElementById("pickup");
+    const deliveryButton = document.getElementById("delivery");
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+ 
+    const deliveryInfo = document.getElementById("deliveryInfo");
+    const deliveryAddressInput = document.getElementById("deliveryAddress");
+    const requestDeliveryBtn = document.getElementById("requestDelivery");
+    const pickupInfo = document.getElementById("pickupInfo");
+    const addressBox = document.getElementById("addressBox");
+    const requestPickupButton = document.getElementById("requestPickup");
+
+    let currentPickupAddress = "";
+
+    onAuthStateChanged(auth, async(user) => {
+      if(!user){
+        window.location.href = "index.html";
+        return;
+      }
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if(userSnap.exists()){
+        const userData = userSnap.data();
+        profileIcon.src = userData.avatar || "default.png";
+      }
+
+      const docRef = doc(db, "donations", itemId);   
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        titleEl.textContent = data.title;
+        descriptionEl.textContent = data.description || "No description provided.";
+        itemImageEl.src = data.imageUrl || "default.png";
+        currentPickupAddress = data.pickUpAddress || "No address provided.";
+      } else {
+        titleEl.textContent = "Item not found";
+        descriptionEl.textContent = "";
+        currentPickupAddress = "";
+      }
+    });
+
+    pickupButton.addEventListener("click", () => {
+      pickupInfo.style.display = "block";      
+      deliveryInfo.style.display = "none";      
+
+      if(currentPickupAddress){
+        addressBox.textContent = currentPickupAddress;
+        requestPickupBtn.style.display = "inline-block";   
+      } else {
+        addressBox.textContent = "No address provided.";
+        requestPickupBtn.style.display = "none";           
+      }
+    });
+
+    deliveryButton.addEventListener("click", () => {
+      deliveryInfo.style.display = "block";
+      pickupInfo.style.display = "none";
+    });
+
+    requestDeliveryBtn.addEventListener("click", () => {
+      const address = deliveryAddressInput.value.trim();
+      if (!address) {
+        alert("Please enter your delivery address.");
+        return;
+      }
+      alert("Item requested");
+      deliveryAddressInput.value = "";
+    });
+
+    requestPickupBtn.addEventListener("click", () => {
+      alert("Item requested");
+    });
+
+    const logOut = document.querySelector('a[href="index.html"]');
+    logOut.addEventListener("click", function(e){
+      e.preventDefault();
+      signOut(auth).then(() => {
+        window.location.href = "index.html";
+      });
+    });
+
+    profileIcon.addEventListener("click", () => {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+
+  </script>
+</body>
+</html>

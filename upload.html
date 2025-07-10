@@ -43,6 +43,8 @@
       <h2>Describe Item</h2>
       <input type="text" id="titleInput" placeholder="Item Title" class="title-input">
       <textarea placeholder="Describe your item here..."></textarea>
+      <h2>Pickup Option Address</h2>
+      <input type="text" id="pickUpAddr" placeholder="Enter Pickup Address" class="pickUpAddr">
       <button class="donate-final">Donate</button>
     </div>
   </main>
@@ -96,6 +98,7 @@
     
   const imageInput = document.getElementById('imageInput');
   const previewContainer = document.getElementById('previewContainer');
+  const pickUpAddrInput = document.getElementById('pickUpAddr');
 
   imageInput.addEventListener('change', function () {
     const files = Array.from(this.files);
@@ -153,7 +156,7 @@
       return;
     }
 
-    if (!title || !file || !description) {
+    if (!title || !file || !description|| !pickUpAddrInput.value.trim()) {
       alert("Please scan an image and enter a title.");
       return;
     }
@@ -173,6 +176,7 @@
             title: title,
             description: description,
             imageUrl: downloadURL,
+            pickUpAddress: pickUpAddrInput.value.trim(),
             timestamp: Timestamp.now()
           })
       alert("Item donated successfully!");
