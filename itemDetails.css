@@ -258,3 +258,12 @@ main {
   background-color: #d66b7e;
   transform: scale(1.05);
 }
+#pickup, #delivery {
+  background-color: #e88094;
+  color: white;
+}
+
+#pickup:hover, #delivery:hover {
+  background-color: #d66b7e;
+  transform: scale(1.05);
+}

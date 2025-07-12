@@ -146,4 +146,54 @@ addMoreBtn.addEventListener("click", () => {
     }
   });
  
+    // Script for google map show
+  let map;
+  let marker;
+  async function initMapWithAddress(address){
+    const apikey = "AIzaSyC2Vn4ENdEM--w0MWkQ0N1H1o5bp1ceX9o";
 
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apikey}`);
+    const data = await response.json();
+
+    if(data.status === 'OK'){
+      const location = data.results[0].geometry.location;
+
+      const mapDiv = document.getElementById("map");
+
+      if(!map) {
+        map = new google.maps.Map(mapDiv, {
+          center: latLng,
+          zoom: 15
+        });
+        marker = new google.maps.Marker({
+          position: location,
+          map: map
+        });
+      }
+      else{
+        map.setCenter(location);
+        marker.setPosition(location);
+      }
+      return location;
+    }
+    else{
+      alert("Could not find the address. Please check the input.");
+      throw new Error("Geocode failed: " + data.status);
+    }
+  }
+
+  // Event listener for address input
+  const addressInput = document.getElementById("pickUpAddr");
+
+  let typingTimer;
+
+  addressInput.addEventListener("input", function() {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      const addr = addressInput.value.trim();  
+  
+      if (addr) {
+        initMapWithAddress(addr);  
+      }
+    }, 1000);
+  });

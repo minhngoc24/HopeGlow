@@ -44,6 +44,7 @@
       <div id="pickupInfo" class="pickup-info" style="display: none;">
         <h3>Please pick up at:</h3>
         <div class="address-box" id="addressBox"></div>
+        <div id="map" style="width: 100%; height: 300px; border-radius: 10px; margin-top: 10px; display: none;"></div>
         <button id="requestPickup" style="margin-top: 12px; padding: 10px 20px; background-color: #e88094; color: white; border: none; border-radius: 8px; cursor: pointer;">Request</button>
       </div>  
 
@@ -58,6 +59,7 @@
     </div>
   </main>
 
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2Vn4ENdEM--w0MWkQ0N1H1o5bp1ceX9o"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -123,10 +125,10 @@
 
       if(currentPickupAddress){
         addressBox.textContent = currentPickupAddress;
-        requestPickupBtn.style.display = "inline-block";   
+        requestPickupButton.style.display = "inline-block";   
       } else {
         addressBox.textContent = "No address provided.";
-        requestPickupBtn.style.display = "none";           
+        requestPickupButton.style.display = "none";           
       }
     });
 
@@ -145,7 +147,7 @@
       deliveryAddressInput.value = "";
     });
 
-    requestPickupBtn.addEventListener("click", () => {
+    requestPickupButton.addEventListener("click", () => {
       alert("Item requested");
     });
 
@@ -166,6 +168,54 @@
         dropdownMenu.style.display = "none";
       }
     });
+
+    let map;
+    let marker;
+
+    async function showMap(address){
+      const apikey = "AIzaSyC2Vn4ENdEM--w0MWkQ0N1H1o5bp1ceX9o";
+      const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apikey}`);
+      const data = await response.json();
+
+      if(data.status === 'OK'){
+        const location = data.results[0].geometry.location;
+        const mapDiv = document.getElementById("map");
+        mapDiv.style.display = "block";
+
+        if(!map){
+          map = new google.maps.Map(mapDiv, {
+            center: location,
+            zoom: 15,
+          });
+
+          marker = new google.maps.Marker({
+            position: location,
+            map: map,
+          });
+        } else {
+         map.setCenter(location);
+         marker.setPosition(location);
+        }
+    }
+    else{
+        alert("Unable to find location. Please check the address.");
+      }
+    }
+
+    pickupButton.addEventListener("click", () => {
+    pickupInfo.style.display = "block";
+    deliveryInfo.style.display = "none";
+
+    if (currentPickupAddress) {
+      addressBox.textContent = currentPickupAddress;
+      requestPickupButton.style.display = "inline-block";
+      showMap(currentPickupAddress);  
+    } else {
+      addressBox.textContent = "No address provided.";
+      requestPickupButton.style.display = "none";
+    }
+  });
+
 
   </script>
 </body>
