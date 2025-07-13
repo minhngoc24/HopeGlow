@@ -173,6 +173,10 @@
       // Get the download URL of the uploaded image
       const downloadURL = await getDownloadURL(snapshot.ref);
       console.log("Download URL:", downloadURL);
+
+      const location = await initMapWithAddress(pickUpAddrInput.value.trim());
+      const lat = location.lat;
+      const lng = location.lng;
       // Upload the image file
       await addDoc(collection(db, "donations"), {
             userId: user.uid,
@@ -180,6 +184,8 @@
             description: description,
             imageUrl: downloadURL,
             pickUpAddress: pickUpAddrInput.value.trim(),
+            lat: lat,
+            lng: lng,
             timestamp: Timestamp.now()
           })
       alert("Item donated successfully!");

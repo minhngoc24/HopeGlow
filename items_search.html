@@ -119,24 +119,6 @@
       }
     });
 
-    pickupButton.addEventListener("click", () => {
-      pickupInfo.style.display = "block";      
-      deliveryInfo.style.display = "none";      
-
-      if(currentPickupAddress){
-        addressBox.textContent = currentPickupAddress;
-        requestPickupButton.style.display = "inline-block";   
-      } else {
-        addressBox.textContent = "No address provided.";
-        requestPickupButton.style.display = "none";           
-      }
-    });
-
-    deliveryButton.addEventListener("click", () => {
-      deliveryInfo.style.display = "block";
-      pickupInfo.style.display = "none";
-    });
-
     requestDeliveryBtn.addEventListener("click", () => {
       const address = deliveryAddressInput.value.trim();
       if (!address) {
@@ -214,6 +196,11 @@
       addressBox.textContent = "No address provided.";
       requestPickupButton.style.display = "none";
     }
+  });
+
+    deliveryButton.addEventListener("click", () => {
+      deliveryInfo.style.display = "block";
+      pickupInfo.style.display = "none";
   });
 
 

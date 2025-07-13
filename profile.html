@@ -55,7 +55,8 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import { firebaseConfig } from "./public/firebase-config.js";
-
+    import { getLatLngFromAddress } from './geocode.js';
+    import { updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -84,9 +85,30 @@
           document.getElementById("profileIcon").src = data.avatar;
           document.getElementById("mainProfilePic").src = data.avatar;
         }
+
+         // Get Longtitude and Latitude for the address
+          if (!data.lat || !data.lng) {
+            const fullAddress = `${data.address1 || ""} ${data.address2 || ""} ${data.city || ""} ${data.state || ""} ${data.postal || ""}`.trim();
+            
+            if (fullAddress.length > 5) {
+              const location = await getLatLngFromAddress(fullAddress);
+              if (location) {
+                await updateDoc(docRef, {
+                  lat: location.lat,
+                  lng: location.lng
+                });
+                console.log("Lat/Lng updated:", location);
+              } else {
+                console.warn("Unable to get coordinates from address");
+              }
+            } else {
+              console.warn("Incomplete address, skipping geocoding.");
+            }
+        }
       } else {
         console.log("No profile data found.");
       }
+
     });
 
 
@@ -118,25 +140,6 @@
       }
     });
 
-    /*
-    // Load data
-    window.addEventListener("DOMContentLoaded", () => {
-      const data = JSON.parse(localStorage.getItem("profileData"));
-      if (data) {
-        document.getElementById("displayName").textContent = `${data.firstName || ""} ${data.lastName || ""}`.trim() || "Your Name";
-        document.getElementById("displayUsername").textContent = data.username || "-";
-        document.getElementById("displayPronouns").textContent = data.pronouns || "-";
-        document.getElementById("displayBirthday").textContent = data.birthday || "-";
-        document.getElementById("displayAddress").textContent =
-          `${data.address1 || ""}, ${data.address2 || ""}, ${data.city || ""}, ${data.state || ""} ${data.postal || ""}`.replace(/^, | ,/g, '');
-
-        if (data.avatar) {
-          document.getElementById("profileIcon").src = data.avatar;
-          document.getElementById("mainProfilePic").src = data.avatar;
-        }
-      }
-    });
-*/
   </script>
 </body>
 </html>

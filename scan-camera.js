@@ -129,12 +129,18 @@ addMoreBtn.addEventListener("click", () => {
       const downloadURL = await getDownloadURL(snapshot.ref);
       console.log("Download URL:", downloadURL);
 
+      const location = await initMapWithAddress(pickUpAddress);
+      const lat = location.lat;
+      const lng = location.lng;
+
       await addDoc(collection(db, "donations"), {
         userId: user.uid,
         title: title,
         description: description,
         imageUrl: downloadURL,
         pickUpAddress: pickUpAddress,
+        lat: lat,
+        lng: lng,
         timestamp: Timestamp.now()
       });
   
@@ -159,10 +165,11 @@ addMoreBtn.addEventListener("click", () => {
       const location = data.results[0].geometry.location;
 
       const mapDiv = document.getElementById("map");
+      mapDiv.style.display = "block";
 
       if(!map) {
         map = new google.maps.Map(mapDiv, {
-          center: latLng,
+          center: location,
           zoom: 15
         });
         marker = new google.maps.Marker({
