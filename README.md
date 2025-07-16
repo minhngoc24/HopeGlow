@@ -20,3 +20,16 @@ More importantly, a person may be a **donor** one day and a **recipient** the ne
 - 📍 Used Google Maps API for distance-based sorting.
 - 🗂️ View pick up address using Google Maps API.
 
+## Getting Started
+Follow these steps to run the project locally.
+### 1. Open a terminal and run: 
+```
+git clone https://github.com/minhngoc24/hopeglow.git
+cd hopeglow
+```
+### 2. Set up front-end:
+```
+cd public
+cp firebase-config.example.js firebase-config.js
+```
+Then go to your **Firebase Console → Project Settings → General**, scroll down to **Web App SDK config**, and paste the config into `firebase-config.js`.
