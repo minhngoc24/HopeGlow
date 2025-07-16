@@ -180,6 +180,7 @@
       // Upload the image file
       await addDoc(collection(db, "donations"), {
             userId: user.uid,
+            donor_id: auth.currentUser.uid,
             title: title,
             description: description,
             imageUrl: downloadURL,
@@ -243,7 +244,7 @@
       if (addr) {
         initMapWithAddress(addr);  
       }
-    }, 1000);
+    }, 2000);
   });
 
 

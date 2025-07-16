@@ -163,4 +163,9 @@ body {
       margin-bottom: 0;
       color: #333;
     }
+    .item-distance {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 4px;
+    }
     

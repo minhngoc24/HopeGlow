@@ -116,7 +116,7 @@ addMoreBtn.addEventListener("click", () => {
       alert("You must be logged in to donate.");
       return;
     }
-    if (!title || !firstImg || !pickUpAddr) {
+    if (!title || !firstImg || !pickUpAddress) {
       alert("Please scan an image and enter a title and pickup address.");
       return;
     }
@@ -135,6 +135,7 @@ addMoreBtn.addEventListener("click", () => {
 
       await addDoc(collection(db, "donations"), {
         userId: user.uid,
+        donor_id: auth.currentUser.uid,
         title: title,
         description: description,
         imageUrl: downloadURL,
@@ -202,5 +203,5 @@ addMoreBtn.addEventListener("click", () => {
       if (addr) {
         initMapWithAddress(addr);  
       }
-    }, 1000);
+    }, 2000);
   });

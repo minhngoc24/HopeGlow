@@ -27,7 +27,8 @@ def search_items():
         description = data.get('description', '').lower()
         donor_id = data.get('donor_id', '')
         if keyword in title or keyword in description:
-            if donor_id != current_user_id:  # Exclude items donated by the current user
+            if donor_id != current_user_id: 
+                print(f"Donor ID: {donor_id}, Current User ID: {current_user_id}")
                 matching_items.append({
                     'id': item.id,
                     'title': data.get('title', ''),

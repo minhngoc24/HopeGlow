@@ -49,7 +49,8 @@
         <textarea id="descInput" placeholder="Describe your item here..."></textarea>
         <h3>Pick-Up Option Address</h3>
         <input type="text" id="pickUpAddr" placeholder="Enter pick-up address" class="pickup-input">
-      
+        <div id="map" style="width: 100%; height: 300px; border-radius: 10px; margin-top: 10px; display: none;"></div>
+        <br>
         <button class="donate-final">Donate</button>
       </div>
     </div>
@@ -58,6 +59,8 @@
   <!--Add TensorFlow library and Coco-ssd-->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2Vn4ENdEM--w0MWkQ0N1H1o5bp1ceX9o"></script>
+
   
   <script type="module" src="scan-camera.js"></script>
   <script type="module">
@@ -103,6 +106,8 @@
           alert("Cannot sign out. Please try again");
         });
     });
+
+
     </script>
    
 </body>

@@ -67,7 +67,7 @@
       }
     });
   
-    // SEARCH FUNCTION STARTS HERE
+    // Search functionality
     const searchInput = document.querySelector('.search-input');
     const searchButton = document.querySelector('.search-button');
     const searchResultsDiv = document.getElementById('searchResults');
@@ -78,6 +78,31 @@
         performSearch();
       }
     });
+
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371; // Radius of the Earth in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c; // Distance in km
+    }
+
+    async function getUserLoc(uid){
+      const userDoc = await getDoc(doc(db, "users", uid));
+      if(userDoc.exists()){
+        const data = userDoc.data();
+        if(data.lat && data.lng){
+          return {
+            lat: parseFloat(data.lat),
+            lng: parseFloat(data.lng)
+          };
+        } 
+      }
+      return null;
+    }
   
     async function performSearch() {
       const query = searchInput.value.trim();
@@ -88,8 +113,26 @@
       try {
         const response = await fetch(`http://127.0.0.1:5000/search?q=${encodeURIComponent(query)}&user_id=${currentUserId}`);
         const data = await response.json();
+
+        // get current user's location from Firestore
+        const userLocation = await getUserLoc(currentUserId);
+        if(userLocation){
+          data.results.forEach(item =>{
+            if(item.lat && item.lng){
+              item.distance = calculateDistance(parseFloat(userLocation.lat),parseFloat(userLocation.lng),parseFloat(item.lat),parseFloat(item.lng));
+            }
+            else {
+              item.distance = Infinity;
+            }
+            console.log("User location:", userLocation);
+            console.log("Item location:", item.lat, item.lng);
+            console.log("Calculated distance:", item.distance);
+          });
+          data.results.sort((a, b) => a.distance - b.distance);
+        }
   
         displayResults(data.results);
+        
       } catch (error) {
         console.error("Error fetching search results:", error);
         alert("An error occurred while searching. Please try again.");
@@ -111,11 +154,13 @@
         itemDiv.classList.add("search-card");
         itemDiv.setAttribute("data-id", item.id);
 
+        console.log("item", item);
         itemDiv.innerHTML = `
         <div class="image-wrapper">
           <img src="${item.imageUrl}" alt="${item.title}">
         </div>
         <h3 class="item-title">${item.title}</h3>
+        <p class="item-distance">${item.distance !== undefined && item.distance !== Infinity ? `${item.distance.toFixed(2)} km away` : '? km away'}</p>
       `;
         console.log('Item:', item);
         console.log('Image URL:', item.imageUrl);
