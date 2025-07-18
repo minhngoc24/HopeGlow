@@ -72,10 +72,10 @@ snap.addEventListener("click", async() => {
   if (hasObject) {
     const best = predictions[0];
     titleInput.value = best.class;
-    descInput.value = best.class; // Set title to the first detected object's class
+    //descInput.value = best.class; // Set title to the first detected object's class
   }else{
     titleInput.value = " No object detected"; 
-    descInput.value = "No object detected"; 
+    //descInput.value = "No object detected"; 
   }
   
   // Hide scan, show donate
@@ -203,5 +203,5 @@ addMoreBtn.addEventListener("click", () => {
       if (addr) {
         initMapWithAddress(addr);  
       }
-    }, 2000);
+    }, 1000);
   });
