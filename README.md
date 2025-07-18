@@ -77,4 +77,14 @@ Open `index.html`file in the root directory and open it in the browser.
 - The system will show items sorted by proximity
 
 ---
+## Demo
+
+[![Watch the demo video](https://img.youtube.com/vi/IkO9sxajr-0/0.jpg)](https://youtu.be/IkO9sxajr-0)
+
+---
+## Future Enhancement
+- Add openAI API to help donors generate description for the item.
+- Let donors and recipients add friend with each other.
+- Create ratings
+
 This project is created for hackathon and educational purposes.Feel free to build upon it, improve it, and use it for good.
