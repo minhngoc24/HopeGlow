@@ -86,5 +86,5 @@ Open `index.html`file in the root directory and open it in the browser.
 - Add openAI API to help donors generate description for the item.
 - Let donors and recipients add friend with each other.
 - Create ratings
-
-This project is created for hackathon and educational purposes.Feel free to build upon it, improve it, and use it for good.
+---
+This project is created for hackathon and educational purposes. Feel free to build upon it, improve it, and use it for good.
